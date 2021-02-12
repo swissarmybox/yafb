@@ -3,7 +3,8 @@
   "version": "0.0.0",
   "scripts": {
     "start": "NODE_ENV=development nodemon --config nodemon.json src/index.ts",
-    "test": "npm run test:unit && npm run test:integration",
+    "build": "tsc",
+    "test": "npm run test:integration",
     "test:integration": "NODE_ENV=test jest --config jest.config.integration.js --maxWorkers=1",
     "test:unit": "NODE_ENV=test jest --config jest.config.unit.js",
     "migrate:make": "knex migrate:make -x ts",

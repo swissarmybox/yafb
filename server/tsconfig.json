@@ -6,10 +6,16 @@
     "removeComments": true,
     "sourceMap": true,
     "typeRoots": [
-      "./types",
+      "types",
       "node_modules/@types"
-    ]
+    ],
+    "outDir": "build"
   },
+  "include": [
+    "configs",
+    "src",
+    "types"
+  ],
   "exclude": [
     "node_modules"
   ]
