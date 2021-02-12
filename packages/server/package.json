@@ -1,0 +1,53 @@
+{
+  "scripts": {
+    "start": "NODE_ENV=development nodemon --config nodemon.json src/index.ts",
+    "test": "npm run test:unit && npm run test:integration",
+    "test:integration": "NODE_ENV=test jest --config jest.config.integration.js --maxWorkers=1",
+    "test:unit": "NODE_ENV=test jest --config jest.config.unit.js",
+    "migrate:make": "knex migrate:make -x ts",
+    "migrate:latest:dev": "NODE_ENV=development knex migrate:latest",
+    "migrate:rollback:dev": "NODE_ENV=development knex migrate:rollback",
+    "migrate:latest:test": "NODE_ENV=test knex migrate:latest",
+    "migrate:rollback:test": "NODE_ENV=test knex migrate:rollback",
+    "lint": "eslint '{configs,src,migrations,tests}/**/*.{js,jsx,ts,tsx}'",
+    "lint:fix": "eslint --fix '{configs,src,migrations,tests}/**/*.{js,jsx,ts,tsx}'"
+  },
+  "devDependencies": {
+    "@types/bcrypt": "^3.0.0",
+    "@types/cookie-parser": "^1.4.2",
+    "@types/cors": "^2.8.9",
+    "@types/express": "^4.17.11",
+    "@types/jest": "^26.0.20",
+    "@types/jsonwebtoken": "^8.5.0",
+    "@types/morgan": "^1.9.2",
+    "@types/supertest": "^2.0.10",
+    "@typescript-eslint/eslint-plugin": "^4.15.0",
+    "@typescript-eslint/parser": "^4.15.0",
+    "eslint": "^7.19.0",
+    "eslint-config-prettier": "^7.2.0",
+    "eslint-plugin-prettier": "^3.3.1",
+    "jest": "^26.6.3",
+    "nodemon": "^2.0.7",
+    "prettier": "^2.2.1",
+    "supertest": "^6.1.3",
+    "ts-jest": "^26.5.0",
+    "ts-node": "^9.1.1",
+    "typescript": "^4.1.3"
+  },
+  "dependencies": {
+    "bcrypt": "^5.0.0",
+    "body-parser": "^1.19.0",
+    "cookie-parser": "^1.4.5",
+    "cors": "^2.8.5",
+    "dotenv": "^8.2.0",
+    "express": "^4.17.1",
+    "helmet": "^4.4.1",
+    "joi": "^17.3.0",
+    "jsonwebtoken": "^8.5.1",
+    "knex": "^0.21.17",
+    "morgan": "^1.10.0",
+    "morgan-json": "^1.1.0",
+    "pg": "^8.5.1",
+    "winston": "^3.3.3"
+  }
+}
