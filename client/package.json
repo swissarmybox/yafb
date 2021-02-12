@@ -1,4 +1,6 @@
 {
+  "name": "@yafb/client",
+  "version": "0.0.0",
   "scripts": {
     "start": "snowpack dev",
     "build": "snowpack build",
