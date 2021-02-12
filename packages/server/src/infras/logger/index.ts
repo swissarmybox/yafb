@@ -1,5 +1,5 @@
 import type { Logger as WinstonLogger } from 'winston';
-import type { Logger } from './types'
+import type { Logger } from './types';
 
 export function createLogger(winstonLogger: WinstonLogger): Logger {
   function http(meta: any): void {

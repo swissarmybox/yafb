@@ -1,8 +1,4 @@
-import type {
-  Credentials,
-  Profile,
-  Password,
-} from '../common/types/auth';
+import type { Credentials, Profile, Password } from '../common/types/auth';
 
 export interface Engine {
   registerUser(credentials: Credentials): Promise<string>;
