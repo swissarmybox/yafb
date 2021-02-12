@@ -1,5 +1,5 @@
 {
-  "name": "@yafb/server",
+  "name": "server",
   "version": "0.0.0",
   "scripts": {
     "start": "NODE_ENV=development nodemon --config nodemon.json src/index.ts",
