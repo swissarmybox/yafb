@@ -9,7 +9,7 @@ export function createModel(infras: Infras): Model {
 
   async function getUsers(): Promise<User[]> {
     logger.debug('Inside getUsers model');
-    const users = (await db.findAll(table)) as {
+    const users = (await db.findAll(table, {})) as {
       id: number;
       email: string;
       role_id: number;
@@ -18,7 +18,7 @@ export function createModel(infras: Infras): Model {
     }[];
 
     // TODO, how to do Join instead
-    const todos = (await db.findAll(roleTable)) as {
+    const todos = (await db.findAll(roleTable, {})) as {
       id: number;
       role: string;
     }[];

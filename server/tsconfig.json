@@ -4,7 +4,7 @@
     "esModuleInterop": true,
     "strict": true,
     "removeComments": true,
-    "sourceMap": true,
+    "sourceMap": false,
     "typeRoots": [
       "types",
       "node_modules/@types"
@@ -12,9 +12,9 @@
     "outDir": "build"
   },
   "include": [
-    "configs",
-    "src",
-    "types"
+    "configs/**/*",
+    "src/**/*",
+    "types/**/*"
   ],
   "exclude": [
     "node_modules"

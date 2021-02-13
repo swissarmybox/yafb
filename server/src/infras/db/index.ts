@@ -13,10 +13,7 @@ export function createDB(knex: Knex): DB {
     await knex.destroy();
   }
 
-  async function findAll(
-    table: string,
-    opts: FindAllOpts = {},
-  ): Promise<unknown[]> {
+  async function findAll(table: string, opts: FindAllOpts): Promise<unknown[]> {
     const select = opts.select || ['*'];
     const where = opts.where || {};
 

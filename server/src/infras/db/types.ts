@@ -35,7 +35,7 @@ export interface DeleteOneOpts {
 
 export interface DB {
   disconnect(): Promise<void>;
-  findAll(table: string, opts: FindAllOpts = {}): Promise<unknown[]>;
+  findAll(table: string, opts: FindAllOpts): Promise<unknown[]>;
   findOne(table: string, opts: FindOneOpts): Promise<null | unknown>;
   insertOne(table: string, opts: InsertOneOpts): Promise<number>;
   updateOne(table: string, opts: UpdateOneOpts): Promise<boolean>;

@@ -24,7 +24,7 @@ export function createEngine(infras: Infras, model: Model): Engine {
     const salt = await bcrypt.genSalt(saltRounds);
     const hashedPassword = await bcrypt.hash(password, salt);
 
-    const id = await model.createUser({
+    await model.createUser({
       email,
       hashedPassword,
       salt,

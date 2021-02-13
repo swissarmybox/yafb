@@ -1,5 +1,3 @@
-import { APIResult } from './common';
-
 export interface Credentials {
   email: string;
   password: string;

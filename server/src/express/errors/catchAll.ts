@@ -12,6 +12,7 @@ export function createCatchAllError(errLoggerFn: ErrLoggerFn) {
     error: AppError,
     req: Request,
     res: Response,
+    // eslint-disable-next-line
     next: NextFunction,
   ): void {
     errLoggerFn(error.name, {

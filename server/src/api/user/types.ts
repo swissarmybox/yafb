@@ -1,4 +1,6 @@
-export type { User } from '../../../common/types/user';
+import * as user from '../../common/types/user';
+
+export type User = user.User;
 
 export interface Engine {
   getUsers(): Promise<User[]>;

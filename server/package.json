@@ -8,12 +8,12 @@
     "test:integration": "NODE_ENV=test jest --config jest.config.integration.js --maxWorkers=1",
     "test:unit": "NODE_ENV=test jest --config jest.config.unit.js",
     "migrate:make": "knex migrate:make -x ts",
-    "migrate:latest:dev": "NODE_ENV=development knex migrate:latest",
-    "migrate:rollback:dev": "NODE_ENV=development knex migrate:rollback",
-    "migrate:latest:test": "NODE_ENV=test knex migrate:latest",
-    "migrate:rollback:test": "NODE_ENV=test knex migrate:rollback",
-    "lint": "eslint '{configs,src,migrations,tests}/**/*.{js,jsx,ts,tsx}'",
-    "lint:fix": "eslint --fix '{configs,src,migrations,tests}/**/*.{js,jsx,ts,tsx}'"
+    "migrate:latest:dev": "NODE_ENV=development knex --knexfile src/configs/knexfile.ts migrate:latest",
+    "migrate:rollback:dev": "NODE_ENV=development knex --knexfile src/configs/knexfile.ts migrate:rollback",
+    "migrate:latest:test": "NODE_ENV=test knex --knexfile src/configs/knexfile.ts migrate:latest",
+    "migrate:rollback:test": "NODE_ENV=test knex --knexfile src/configs/knexfile.ts migrate:rollback",
+    "lint": "eslint '{src,migrations,tests}/**/*.{js,jsx,ts,tsx}'",
+    "lint:fix": "eslint --fix '{src,migrations,tests}/**/*.{js,jsx,ts,tsx}'"
   },
   "devDependencies": {
     "@types/bcrypt": "^3.0.0",

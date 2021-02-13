@@ -1,53 +1,58 @@
-clean-client:
-	cd client && rm -rf node_modules && rm -rf build
-
 clean-server:
-	cd server && rm -rf node_modules && rm -rf build
+	cd server && rm -rf build
 
-clean: clean-client client-server
+clean-client:
+	cd client && rm -rf build
+
+clean: clean-server clean-client
 	rm -rf dist
-
-bootstrap-client:
-	cd client && npm install
 
 bootstrap-server:
 	cd server && npm install
 
-bootstrap: bootstrap-client bootstrap-server
+bootstrap-client:
+	cd client && npm install
 
-test-client:
-	cd client && npm test
+bootstrap: bootstrap-server bootstrap-client
 
 test-server:
 	cd server && npm test
 
-test: test-client test-server
+test-client:
+	cd client && npm test
 
-lint-client:
-	cd client && npm run lint:fix
+test: test-server test-client
 
 lint-server:
 	cd server && npm run lint:fix
 
-lint: lint-client lint-server
+lint-client:
+	cd client && npm run lint:fix
 
-start-client:
-	cd client && npm start
+lint: lint-server lint-client
 
-start-server:
+dev-server:
 	cd server && npm start
 
-build-client:
-	cd client && npm run build
+dev-client:
+	cd client && npm start
+
+dev: dev-server && dev-client
 
 build-server:
 	cd server && npm run build
 
-build: build-client
+build-client:
+	cd client && npm run build
+
+build: build-server build-client
 	rm -rf dist
 	mkdir dist
-	mv client/build dist/public 
-	mv client/build dist/ 
-	cp server/package.json dist/
-	cp server/package-lock.json dist/
+	mv client/build dist/client 
+	mv server/build dist/server 
+	cp server/{package.json,package-lock.json} dist/
 	cd dist && npm install --only=production
+	rm dist/{package.json,package-lock.json}
+
+prod:
+	NODE_ENV=production node dist/server/index.js

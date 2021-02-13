@@ -31,7 +31,7 @@ export const logger = {
     levels: winston.config.npm.levels,
     transports: [
       new winston.transports.Console({
-        level: 'warn',
+        level: 'info',
         format: winston.format.json(),
       }),
     ],

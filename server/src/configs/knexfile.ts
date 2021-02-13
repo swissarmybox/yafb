@@ -1,4 +1,6 @@
-import path from 'path'
+import path from 'path';
+
+const migrationsDir = path.join(__dirname, '../../migrations');
 
 module.exports = {
   test: {
@@ -15,8 +17,8 @@ module.exports = {
       max: 1,
     },
     migrations: {
-      directory: path.join(__dirname, 'migrations')
-    }
+      directory: migrationsDir,
+    },
   },
   development: {
     client: 'postgresql',
@@ -32,8 +34,8 @@ module.exports = {
       max: 1,
     },
     migrations: {
-      directory: path.join(__dirname, 'migrations')
-    }
+      directory: migrationsDir,
+    },
   },
   production: {
     client: 'postgresql',
@@ -49,7 +51,7 @@ module.exports = {
       max: 1,
     },
     migrations: {
-      directory: path.join(__dirname, 'migrations')
-    }
+      directory: migrationsDir,
+    },
   },
 };

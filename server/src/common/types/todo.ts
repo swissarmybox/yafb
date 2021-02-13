@@ -1,5 +1,3 @@
-import { APIResult } from './common';
-
 export interface Todo {
   id: number;
   title: string;
@@ -9,5 +7,5 @@ export interface Todo {
   updatedAt: string;
 }
 
-export type NewTodo = Omit<Todo, 'id', 'done', 'createdAt', 'updatedAt'>;
-export type UpdateTodo = Omit<Todo, 'id', 'createdAt', 'updatedAt'>;
+export type NewTodo = Omit<Todo, 'id' | 'done' | 'createdAt' | 'updatedAt'>;
+export type UpdateTodo = Omit<Todo, 'id' | 'createdAt' | 'updatedAt'>;

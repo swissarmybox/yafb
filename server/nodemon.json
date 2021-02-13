@@ -2,13 +2,13 @@
   "ignore": [
     ".git",
     "node_modules/",
-    "dist/",
+    "build/",
     "coverage/"
   ],
   "watch": [
     "configs",
-    "src/server",
-    "src/shared"
+    "src",
+    "types"
   ],
   "ext": "js,json,ts"
 }

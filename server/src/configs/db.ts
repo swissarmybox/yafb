@@ -1,4 +1,4 @@
-import * as knexConfig from '../knexfile';
+import * as knexConfig from './knexfile';
 
 export const db = {
   test: (knexConfig as any).test,

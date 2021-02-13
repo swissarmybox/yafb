@@ -1,4 +1,8 @@
-export type { Todo, NewTodo, UpdateTodo } from '../../../common/types/todo';
+import * as todo from '../../common/types/todo';
+
+export type Todo = todo.Todo;
+export type NewTodo = todo.NewTodo;
+export type UpdateTodo = todo.UpdateTodo;
 
 export interface Engine {
   getTodos(userID: number): Promise<Todo[]>;
