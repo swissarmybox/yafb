@@ -37,7 +37,7 @@ dev-server:
 dev-client:
 	cd client && npm start
 
-dev: dev-server && dev-client
+dev: dev-server dev-client
 
 build-server:
 	cd server && npm run build
