@@ -27,7 +27,7 @@ export function Navigation() {
   return (
     <Menubar
       model={items}
-      end={<Button label="Logout" icon="pi pi-power-off" />}
+      end={() => <Button label="Logout" icon="pi pi-power-off" />}
     />
   );
 }

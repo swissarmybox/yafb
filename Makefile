@@ -1,8 +1,8 @@
 clean-server:
-	cd server && rm -rf build
+	cd server && npm run clean
 
 clean-client:
-	cd client && rm -rf build
+	cd client && npm run clean
 
 clean: clean-server clean-client
 	rm -rf dist

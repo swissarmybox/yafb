@@ -11,22 +11,26 @@ export function TodoList() {
       label: 'Update',
       icon: 'pi pi-refresh',
       command: (e) => {
+        /**
         toast.current.show({
           severity: 'success',
           summary: 'Updated',
           detail: 'Data Updated',
         });
+         **/
       },
     },
     {
       label: 'Delete',
       icon: 'pi pi-times',
       command: (e) => {
+        /**
         toast.current.show({
           severity: 'success',
           summary: 'Delete',
           detail: 'Data Deleted',
         });
+         **/
       },
     },
     {
@@ -192,7 +196,7 @@ export function TodoList() {
 
   return (
     <div>
-      <Toolbar left={leftContents} right={rightContents} />
+      <Toolbar left={() => leftContents} right={() => rightContents} />
       <div>
         <div className="card">
           <DataTable value={products}>
