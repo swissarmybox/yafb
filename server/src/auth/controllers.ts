@@ -1,3 +1,5 @@
+import jwt from 'jsonwebtoken';
+import bcrypt from 'bcrypt';
 import type { Request, Response } from 'express';
 import type { Infras } from '../infras';
 import { createModel } from './model';
@@ -7,7 +9,7 @@ import * as schema from './schema';
 export function createControllers(infras: Infras) {
   const { logger } = infras;
   const model = createModel(infras);
-  const engine = createEngine(infras, model);
+  const engine = createEngine(infras, model, bcrypt, jwt);
 
   const cookieName = 'jwt';
 

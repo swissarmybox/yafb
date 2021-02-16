@@ -10,8 +10,6 @@ export function createModel(infras: Infras): Model {
   const joinedFields = [
     'users.id',
     'users.email',
-    'users.hashed_password',
-    'users.salt',
     'roles.id as role_id',
     'roles.role as role',
   ]

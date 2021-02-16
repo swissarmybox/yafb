@@ -1,5 +1,3 @@
-import jwt from 'jsonwebtoken';
-import bcrypt from 'bcrypt';
 import {
   AppError,
   DUPLICATE_USER,
@@ -8,9 +6,14 @@ import {
 } from '../../common/errors';
 import { Credentials, Profile, Password } from '../../common/types/auth';
 import type { Infras } from '../../infras';
-import type { Engine, Model } from '../types';
+import type { Engine, Model, Bcrypt, JWT } from '../types';
 
-export function createEngine(infras: Infras, model: Model): Engine {
+export function createEngine(
+  infras: Infras,
+  model: Model,
+  bcrypt: Bcrypt,
+  jwt: JWT,
+): Engine {
   const { logger } = infras;
 
   const tokenSecret = 'yafb_token';
@@ -39,7 +42,6 @@ export function createEngine(infras: Infras, model: Model): Engine {
     if (newlySavedUser === null) {
       throw new AppError('Newly registered user is deleted', FATAL);
     }
-
 
     const payload = {
       id: newlySavedUser.id,

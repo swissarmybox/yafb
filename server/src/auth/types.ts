@@ -33,3 +33,16 @@ export interface Model {
     credentials: EncryptedCredentials,
   ): Promise<boolean>;
 }
+
+export interface Bcrypt {
+  genSalt(rounds: number): Promise<string>;
+  hash(password: string, salt: string): Promise<string>;
+  compare(password: string, hashedPassword: string): Promise<boolean>; 
+}
+
+export interface JWT {
+  sign(payload: any, secret: string, options: {
+    algorithm: 'HS256';
+    expiresIn: number;
+  }): string;
+}
