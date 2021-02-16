@@ -1,7 +1,7 @@
 import supertest from 'supertest';
-import { parseCookie } from '../../../utils';
+import { parseCookie } from '../../utils';
 
-describe('GET /api/todos/:id', () => {
+describe('POST /api/todos', () => {
   const USER_TABLE = 'users';
   const TODO_TABLE = 'todos';
 
@@ -13,13 +13,13 @@ describe('GET /api/todos/:id', () => {
     await db.resetTable(USER_TABLE);
   });
 
-  it('given no cookie, should fail to get todo', async () => {
+  it('given no cookie, should fail to create todo', async () => {
     // Arrange
     // @ts-ignore
     const request = supertest(global['server']);
 
     // Act
-    const res = await request.get('/api/todos/1').send();
+    const res = await request.post('/api/todos').send();
 
     // Assert
     expect(res.status).toBe(400);
@@ -32,7 +32,7 @@ describe('GET /api/todos/:id', () => {
     });
   });
 
-  it('given cookie but wrong todo id, should fail to get todo', async () => {
+  it('given cookie but wrong todo data, should fail to create todo', async () => {
     // Arrange
     const email = 'user@email.com';
     const password = '123456';
@@ -53,9 +53,12 @@ describe('GET /api/todos/:id', () => {
 
     // Act
     const res2 = await request
-      .get('/api/todos/abcdefg')
+      .post('/api/todos')
       .set('Cookie', `jwt=${jwtCookie};`)
-      .send();
+      .send({
+        titlexyz: 'Todo 1',
+        description: 'Todo 1',
+      });
 
     // Assert
     expect(res2.status).toBe(400);
@@ -63,12 +66,12 @@ describe('GET /api/todos/:id', () => {
     expect(res2.body.error).toEqual({
       code: 400,
       name: 'INVALID_PARAMETER_ERROR',
-      message: '"value" must be a number',
+      message: '"title" is required',
       isOperational: true,
     });
   });
 
-  it('given cookie but non existing todo id, should fail to get todo', async () => {
+  it('given cookie, should be able to create todo', async () => {
     // Arrange
     const email = 'user@email.com';
     const password = '123456';
@@ -89,31 +92,18 @@ describe('GET /api/todos/:id', () => {
 
     // Act
     const res2 = await request
-      .get('/api/todos/1')
+      .post('/api/todos')
       .set('Cookie', `jwt=${jwtCookie};`)
-      .send();
+      .send({
+        title: 'Todo 1',
+        description: 'Todo 1',
+      });
 
     // Assert
-    expect(res2.status).toBe(404);
-    expect(res2.body.status).toBe('failure');
-    expect(res2.body.error).toEqual({
-      code: 404,
-      name: 'NOT_FOUND_ERROR',
-      message: 'Failed to find todo with id 1',
-      isOperational: true,
-    });
-  });
-
-  it('given cookie, should be able to get todo', async () => {
-    // Arrange
-    const email = 'user@email.com';
-    const password = '123456';
-
-    // @ts-ignore
-    const request = supertest(global['server']);
-    await request.post('/auth/register').send({
-      email,
-      password,
+    expect(res2.status).toBe(200);
+    expect(res2.body).toEqual({
+      status: 'success',
+      data: 1,
     });
 
     // @ts-ignore
@@ -125,35 +115,17 @@ describe('GET /api/todos/:id', () => {
       },
     });
 
-    await db.insertOne(TODO_TABLE, {
-      data: {
-        title: 'Todo 1',
-        description: 'Todo 1',
-        user_id: user.id,
+    const todo = await db.findOne(TODO_TABLE, {
+      where: {
+        id: res2.body.data,
       },
     });
 
-    const res = await request.post('/auth/login').send({
-      email,
-      password,
-    });
-
-    const jwtCookie = parseCookie(res.header);
-
-    // Act
-    const res2 = await request
-      .get('/api/todos/1')
-      .set('Cookie', `jwt=${jwtCookie};`)
-      .send();
-
-    // Assert
-    expect(res2.status).toBe(200);
-    expect(res2.body.status).toBe('success');
-    expect(res2.body.data).toEqual(
+    expect(todo).toEqual(
       expect.objectContaining({
-        id: 1,
         title: 'Todo 1',
         description: 'Todo 1',
+        user_id: user.id,
         done: false,
       }),
     );

@@ -1,5 +1,5 @@
 import supertest from 'supertest';
-import { parseCookie } from '../../../utils';
+import { parseCookie } from '../../utils';
 
 describe('GET /api/user/:id', () => {
   const USERTABLE = 'users';

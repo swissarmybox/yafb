@@ -1,7 +1,7 @@
 import supertest from 'supertest';
-import { parseCookie } from '../../../utils';
+import { parseCookie } from '../../utils';
 
-describe('PUT /api/todos/:id', () => {
+describe('GET /api/todos/:id', () => {
   const USER_TABLE = 'users';
   const TODO_TABLE = 'todos';
 
@@ -13,13 +13,13 @@ describe('PUT /api/todos/:id', () => {
     await db.resetTable(USER_TABLE);
   });
 
-  it('given no cookie, should fail to update todo', async () => {
+  it('given no cookie, should fail to get todo', async () => {
     // Arrange
     // @ts-ignore
     const request = supertest(global['server']);
 
     // Act
-    const res = await request.put('/api/todos/1').send();
+    const res = await request.get('/api/todos/1').send();
 
     // Assert
     expect(res.status).toBe(400);
@@ -32,7 +32,7 @@ describe('PUT /api/todos/:id', () => {
     });
   });
 
-  it('given cookie but wrong todo id, should fail to update todo', async () => {
+  it('given cookie but wrong todo id, should fail to get todo', async () => {
     // Arrange
     const email = 'user@email.com';
     const password = '123456';
@@ -53,13 +53,9 @@ describe('PUT /api/todos/:id', () => {
 
     // Act
     const res2 = await request
-      .put('/api/todos/abcdefg')
+      .get('/api/todos/abcdefg')
       .set('Cookie', `jwt=${jwtCookie};`)
-      .send({
-        title: 'Todo 1',
-        description: 'Todo 1',
-        done: true,
-      });
+      .send();
 
     // Assert
     expect(res2.status).toBe(400);
@@ -72,7 +68,7 @@ describe('PUT /api/todos/:id', () => {
     });
   });
 
-  it('given cookie but non existing todo id, should fail to update todo', async () => {
+  it('given cookie but non existing todo id, should fail to get todo', async () => {
     // Arrange
     const email = 'user@email.com';
     const password = '123456';
@@ -93,13 +89,9 @@ describe('PUT /api/todos/:id', () => {
 
     // Act
     const res2 = await request
-      .put('/api/todos/1')
+      .get('/api/todos/1')
       .set('Cookie', `jwt=${jwtCookie};`)
-      .send({
-        title: 'Todo 1',
-        description: 'Todo 1',
-        done: true,
-      });
+      .send();
 
     // Assert
     expect(res2.status).toBe(404);
@@ -107,52 +99,12 @@ describe('PUT /api/todos/:id', () => {
     expect(res2.body.error).toEqual({
       code: 404,
       name: 'NOT_FOUND_ERROR',
-      message: 'Failed to update todo with id 1',
+      message: 'Failed to find todo with id 1',
       isOperational: true,
     });
   });
 
-  it('given cookie but wrong todo data, should fail to update todo', async () => {
-    // Arrange
-    const email = 'user@email.com';
-    const password = '123456';
-
-    // @ts-ignore
-    const request = supertest(global['server']);
-    await request.post('/auth/register').send({
-      email,
-      password,
-    });
-
-    const res = await request.post('/auth/login').send({
-      email,
-      password,
-    });
-
-    const jwtCookie = parseCookie(res.header);
-
-    // Act
-    const res2 = await request
-      .put('/api/todos/1')
-      .set('Cookie', `jwt=${jwtCookie};`)
-      .send({
-        titlexyz: 'Todo 1',
-        description: 'Todo 1',
-        done: true,
-      });
-
-    // Assert
-    expect(res2.status).toBe(400);
-    expect(res2.body.status).toBe('failure');
-    expect(res2.body.error).toEqual({
-      code: 400,
-      name: 'INVALID_PARAMETER_ERROR',
-      message: '"title" is required',
-      isOperational: true,
-    });
-  });
-
-  it('given cookie, should be able to update todo', async () => {
+  it('given cookie, should be able to get todo', async () => {
     // Arrange
     const email = 'user@email.com';
     const password = '123456';
@@ -190,35 +142,19 @@ describe('PUT /api/todos/:id', () => {
 
     // Act
     const res2 = await request
-      .put('/api/todos/1')
+      .get('/api/todos/1')
       .set('Cookie', `jwt=${jwtCookie};`)
-      .send({
-        title: 'Todo 1',
-        description: 'Todo 1',
-        done: true,
-      });
+      .send();
 
     // Assert
     expect(res2.status).toBe(200);
-    expect(res2.body).toEqual({
-      status: 'success',
-      data: null,
-    });
-
-    const todo = await db.findOne(TODO_TABLE, {
-      where: {
-        title: 'Todo 1',
-        description: 'Todo 1',
-        user_id: user.id,
-      },
-    });
-
-    expect(todo).toEqual(
+    expect(res2.body.status).toBe('success');
+    expect(res2.body.data).toEqual(
       expect.objectContaining({
+        id: 1,
         title: 'Todo 1',
         description: 'Todo 1',
-        user_id: user.id,
-        done: true,
+        done: false,
       }),
     );
   });

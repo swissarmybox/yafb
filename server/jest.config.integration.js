@@ -2,7 +2,7 @@ const baseJestConfig = require('./jest.config.js')
 
 module.exports = {
   ...baseJestConfig,
-  roots: ['<rootDir>/tests/integration'],
+  roots: ['<rootDir>/tests'],
   setupFilesAfterEnv: ['<rootDir>/tests/setup.ts'],
   // collectCoverageFrom: ['./','!./node_modules/'],
   // coverageTreshold: {

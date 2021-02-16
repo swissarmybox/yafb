@@ -1,25 +1,23 @@
 import supertest from 'supertest';
-import { parseCookie } from '../../../utils';
+import { parseCookie } from '../../utils';
 
-describe('DELETE /api/todos/:id', () => {
-  const USER_TABLE = 'users';
-  const TODO_TABLE = 'todos';
+describe('DELETE /api/user/:id', () => {
+  const USERTABLE = 'users';
+  const ADMIN_ROLE = 1;
+  const USER_ROLE = 2;
 
   beforeEach(async () => {
     // @ts-ignore
-    const db = global['infras'].db;
-
-    await db.resetTable(TODO_TABLE);
-    await db.resetTable(USER_TABLE);
+    await global['infras'].db.resetTable(USERTABLE);
   });
 
-  it('given no cookie, should fail to delete todo', async () => {
+  it('given no cookie, should fail to delete user', async () => {
     // Arrange
     // @ts-ignore
     const request = supertest(global['server']);
 
     // Act
-    const res = await request.delete('/api/todos/1').send();
+    const res = await request.delete('/api/users/1').send();
 
     // Assert
     expect(res.status).toBe(400);
@@ -32,9 +30,37 @@ describe('DELETE /api/todos/:id', () => {
     });
   });
 
-  it('given cookie but wrong todo id, should fail to delete todo', async () => {
+  it('given cookie but incorrect role, should fail to delete user', async () => {
     // Arrange
-    const email = 'user@email.com';
+    // @ts-ignore
+    const request = supertest(global['server']);
+    const res = await request.post('/auth/register').send({
+      email: 'user@email.com',
+      password: '123456',
+    });
+
+    const jwtCookie = parseCookie(res.header);
+
+    // Act
+    const res2 = await request
+      .delete('/api/users/1')
+      .set('Cookie', `jwt=${jwtCookie};`)
+      .send();
+
+    // Assert
+    expect(res2.status).toBe(401);
+    expect(res2.body.status).toBe('failure');
+    expect(res2.body.error).toEqual({
+      code: 401,
+      name: 'UNAUTHORIZED_ERROR',
+      message: 'User is not authorized',
+      isOperational: true,
+    });
+  });
+
+  it('given cookie, correct role but wrong user id, should fail to delete user', async () => {
+    // Arrange
+    const email = 'admin@email.com';
     const password = '123456';
 
     // @ts-ignore
@@ -42,6 +68,23 @@ describe('DELETE /api/todos/:id', () => {
     await request.post('/auth/register').send({
       email,
       password,
+    });
+
+    // @ts-ignore
+    const db = global['infras'].db;
+    const admin = await db.findOne(USERTABLE, {
+      where: {
+        email,
+      },
+    });
+
+    await db.updateOne(USERTABLE, {
+      where: {
+        id: admin.id,
+      },
+      data: {
+        role_id: ADMIN_ROLE,
+      },
     });
 
     const res = await request.post('/auth/login').send({
@@ -53,7 +96,7 @@ describe('DELETE /api/todos/:id', () => {
 
     // Act
     const res2 = await request
-      .delete('/api/todos/abcdefg')
+      .delete('/api/users/abcdef')
       .set('Cookie', `jwt=${jwtCookie};`)
       .send();
 
@@ -68,45 +111,9 @@ describe('DELETE /api/todos/:id', () => {
     });
   });
 
-  it('given cookie but non existing todo id, should fail to delete todo', async () => {
+  it('given cookie, correct role but non existing user id, should fail to delete user', async () => {
     // Arrange
-    const email = 'user@email.com';
-    const password = '123456';
-
-    // @ts-ignore
-    const request = supertest(global['server']);
-    await request.post('/auth/register').send({
-      email,
-      password,
-    });
-
-    const res = await request.post('/auth/login').send({
-      email,
-      password,
-    });
-
-    const jwtCookie = parseCookie(res.header);
-
-    // Act
-    const res2 = await request
-      .delete('/api/todos/1')
-      .set('Cookie', `jwt=${jwtCookie};`)
-      .send();
-
-    // Assert
-    expect(res2.status).toBe(404);
-    expect(res2.body.status).toBe('failure');
-    expect(res2.body.error).toEqual({
-      code: 404,
-      name: 'NOT_FOUND_ERROR',
-      message: 'Failed to delete todo with id 1',
-      isOperational: true,
-    });
-  });
-
-  it('given cookie, should be able to delete todo', async () => {
-    // Arrange
-    const email = 'user@email.com';
+    const email = 'admin@email.com';
     const password = '123456';
 
     // @ts-ignore
@@ -118,18 +125,18 @@ describe('DELETE /api/todos/:id', () => {
 
     // @ts-ignore
     const db = global['infras'].db;
-
-    const user = await db.findOne(USER_TABLE, {
+    const admin = await db.findOne(USERTABLE, {
       where: {
         email,
       },
     });
 
-    await db.insertOne(TODO_TABLE, {
+    await db.updateOne(USERTABLE, {
+      where: {
+        id: admin.id,
+      },
       data: {
-        title: 'Todo 1',
-        description: 'Todo 1',
-        user_id: user.id,
+        role_id: ADMIN_ROLE,
       },
     });
 
@@ -142,7 +149,69 @@ describe('DELETE /api/todos/:id', () => {
 
     // Act
     const res2 = await request
-      .delete('/api/todos/1')
+      .delete('/api/users/2')
+      .set('Cookie', `jwt=${jwtCookie};`)
+      .send();
+
+    // Assert
+    expect(res2.status).toBe(404);
+    expect(res2.body.status).toBe('failure');
+    expect(res2.body.error).toEqual({
+      code: 404,
+      name: 'NOT_FOUND_ERROR',
+      message: 'Failed to delete user with id 2',
+      isOperational: true,
+    });
+  });
+
+  it('given cookie and correct role, should be able to delete user', async () => {
+    // Arrange
+    const email = 'admin@email.com';
+    const password = '123456';
+
+    // @ts-ignore
+    const request = supertest(global['server']);
+    await request.post('/auth/register').send({
+      email,
+      password,
+    });
+
+    // @ts-ignore
+    const db = global['infras'].db;
+    const admin = await db.findOne(USERTABLE, {
+      where: {
+        email,
+      },
+    });
+
+    await db.updateOne(USERTABLE, {
+      where: {
+        id: admin.id,
+      },
+      data: {
+        role_id: ADMIN_ROLE,
+      },
+    });
+
+    await db.insertOne(USERTABLE, {
+      data: {
+        email: 'hello@world.com',
+        role_id: USER_ROLE,
+        salt: 'abcde',
+        hashed_password: 'fghij',
+      },
+    });
+
+    const res = await request.post('/auth/login').send({
+      email,
+      password,
+    });
+
+    const jwtCookie = parseCookie(res.header);
+
+    // Act
+    const res2 = await request
+      .delete('/api/users/2')
       .set('Cookie', `jwt=${jwtCookie};`)
       .send();
 

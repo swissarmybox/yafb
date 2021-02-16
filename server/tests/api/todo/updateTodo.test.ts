@@ -1,23 +1,25 @@
 import supertest from 'supertest';
-import { parseCookie } from '../../../utils';
+import { parseCookie } from '../../utils';
 
-describe('DELETE /api/user/:id', () => {
-  const USERTABLE = 'users';
-  const ADMIN_ROLE = 1;
-  const USER_ROLE = 2;
+describe('PUT /api/todos/:id', () => {
+  const USER_TABLE = 'users';
+  const TODO_TABLE = 'todos';
 
   beforeEach(async () => {
     // @ts-ignore
-    await global['infras'].db.resetTable(USERTABLE);
+    const db = global['infras'].db;
+
+    await db.resetTable(TODO_TABLE);
+    await db.resetTable(USER_TABLE);
   });
 
-  it('given no cookie, should fail to delete user', async () => {
+  it('given no cookie, should fail to update todo', async () => {
     // Arrange
     // @ts-ignore
     const request = supertest(global['server']);
 
     // Act
-    const res = await request.delete('/api/users/1').send();
+    const res = await request.put('/api/todos/1').send();
 
     // Assert
     expect(res.status).toBe(400);
@@ -30,37 +32,9 @@ describe('DELETE /api/user/:id', () => {
     });
   });
 
-  it('given cookie but incorrect role, should fail to delete user', async () => {
+  it('given cookie but wrong todo id, should fail to update todo', async () => {
     // Arrange
-    // @ts-ignore
-    const request = supertest(global['server']);
-    const res = await request.post('/auth/register').send({
-      email: 'user@email.com',
-      password: '123456',
-    });
-
-    const jwtCookie = parseCookie(res.header);
-
-    // Act
-    const res2 = await request
-      .delete('/api/users/1')
-      .set('Cookie', `jwt=${jwtCookie};`)
-      .send();
-
-    // Assert
-    expect(res2.status).toBe(401);
-    expect(res2.body.status).toBe('failure');
-    expect(res2.body.error).toEqual({
-      code: 401,
-      name: 'UNAUTHORIZED_ERROR',
-      message: 'User is not authorized',
-      isOperational: true,
-    });
-  });
-
-  it('given cookie, correct role but wrong user id, should fail to delete user', async () => {
-    // Arrange
-    const email = 'admin@email.com';
+    const email = 'user@email.com';
     const password = '123456';
 
     // @ts-ignore
@@ -68,23 +42,6 @@ describe('DELETE /api/user/:id', () => {
     await request.post('/auth/register').send({
       email,
       password,
-    });
-
-    // @ts-ignore
-    const db = global['infras'].db;
-    const admin = await db.findOne(USERTABLE, {
-      where: {
-        email,
-      },
-    });
-
-    await db.updateOne(USERTABLE, {
-      where: {
-        id: admin.id,
-      },
-      data: {
-        role_id: ADMIN_ROLE,
-      },
     });
 
     const res = await request.post('/auth/login').send({
@@ -96,9 +53,13 @@ describe('DELETE /api/user/:id', () => {
 
     // Act
     const res2 = await request
-      .delete('/api/users/abcdef')
+      .put('/api/todos/abcdefg')
       .set('Cookie', `jwt=${jwtCookie};`)
-      .send();
+      .send({
+        title: 'Todo 1',
+        description: 'Todo 1',
+        done: true,
+      });
 
     // Assert
     expect(res2.status).toBe(400);
@@ -111,9 +72,9 @@ describe('DELETE /api/user/:id', () => {
     });
   });
 
-  it('given cookie, correct role but non existing user id, should fail to delete user', async () => {
+  it('given cookie but non existing todo id, should fail to update todo', async () => {
     // Arrange
-    const email = 'admin@email.com';
+    const email = 'user@email.com';
     const password = '123456';
 
     // @ts-ignore
@@ -121,23 +82,6 @@ describe('DELETE /api/user/:id', () => {
     await request.post('/auth/register').send({
       email,
       password,
-    });
-
-    // @ts-ignore
-    const db = global['infras'].db;
-    const admin = await db.findOne(USERTABLE, {
-      where: {
-        email,
-      },
-    });
-
-    await db.updateOne(USERTABLE, {
-      where: {
-        id: admin.id,
-      },
-      data: {
-        role_id: ADMIN_ROLE,
-      },
     });
 
     const res = await request.post('/auth/login').send({
@@ -149,9 +93,13 @@ describe('DELETE /api/user/:id', () => {
 
     // Act
     const res2 = await request
-      .delete('/api/users/2')
+      .put('/api/todos/1')
       .set('Cookie', `jwt=${jwtCookie};`)
-      .send();
+      .send({
+        title: 'Todo 1',
+        description: 'Todo 1',
+        done: true,
+      });
 
     // Assert
     expect(res2.status).toBe(404);
@@ -159,14 +107,54 @@ describe('DELETE /api/user/:id', () => {
     expect(res2.body.error).toEqual({
       code: 404,
       name: 'NOT_FOUND_ERROR',
-      message: 'Failed to delete user with id 2',
+      message: 'Failed to update todo with id 1',
       isOperational: true,
     });
   });
 
-  it('given cookie and correct role, should be able to delete user', async () => {
+  it('given cookie but wrong todo data, should fail to update todo', async () => {
     // Arrange
-    const email = 'admin@email.com';
+    const email = 'user@email.com';
+    const password = '123456';
+
+    // @ts-ignore
+    const request = supertest(global['server']);
+    await request.post('/auth/register').send({
+      email,
+      password,
+    });
+
+    const res = await request.post('/auth/login').send({
+      email,
+      password,
+    });
+
+    const jwtCookie = parseCookie(res.header);
+
+    // Act
+    const res2 = await request
+      .put('/api/todos/1')
+      .set('Cookie', `jwt=${jwtCookie};`)
+      .send({
+        titlexyz: 'Todo 1',
+        description: 'Todo 1',
+        done: true,
+      });
+
+    // Assert
+    expect(res2.status).toBe(400);
+    expect(res2.body.status).toBe('failure');
+    expect(res2.body.error).toEqual({
+      code: 400,
+      name: 'INVALID_PARAMETER_ERROR',
+      message: '"title" is required',
+      isOperational: true,
+    });
+  });
+
+  it('given cookie, should be able to update todo', async () => {
+    // Arrange
+    const email = 'user@email.com';
     const password = '123456';
 
     // @ts-ignore
@@ -178,27 +166,18 @@ describe('DELETE /api/user/:id', () => {
 
     // @ts-ignore
     const db = global['infras'].db;
-    const admin = await db.findOne(USERTABLE, {
+
+    const user = await db.findOne(USER_TABLE, {
       where: {
         email,
       },
     });
 
-    await db.updateOne(USERTABLE, {
-      where: {
-        id: admin.id,
-      },
+    await db.insertOne(TODO_TABLE, {
       data: {
-        role_id: ADMIN_ROLE,
-      },
-    });
-
-    await db.insertOne(USERTABLE, {
-      data: {
-        email: 'hello@world.com',
-        role_id: USER_ROLE,
-        salt: 'abcde',
-        hashed_password: 'fghij',
+        title: 'Todo 1',
+        description: 'Todo 1',
+        user_id: user.id,
       },
     });
 
@@ -211,9 +190,13 @@ describe('DELETE /api/user/:id', () => {
 
     // Act
     const res2 = await request
-      .delete('/api/users/2')
+      .put('/api/todos/1')
       .set('Cookie', `jwt=${jwtCookie};`)
-      .send();
+      .send({
+        title: 'Todo 1',
+        description: 'Todo 1',
+        done: true,
+      });
 
     // Assert
     expect(res2.status).toBe(200);
@@ -221,5 +204,22 @@ describe('DELETE /api/user/:id', () => {
       status: 'success',
       data: null,
     });
+
+    const todo = await db.findOne(TODO_TABLE, {
+      where: {
+        title: 'Todo 1',
+        description: 'Todo 1',
+        user_id: user.id,
+      },
+    });
+
+    expect(todo).toEqual(
+      expect.objectContaining({
+        title: 'Todo 1',
+        description: 'Todo 1',
+        user_id: user.id,
+        done: true,
+      }),
+    );
   });
 });
