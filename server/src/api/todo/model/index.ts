@@ -37,7 +37,7 @@ export function createModel(infras: Infras): Model {
         id: todoID,
         user_id: userID,
       },
-    })) as {
+    })) as null | {
       id: number;
       title: string;
       description: string;

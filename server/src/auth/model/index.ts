@@ -8,41 +8,43 @@ export function createModel(infras: Infras): Model {
   const roleTable = 'roles';
   const userRole = 2;
 
+  const joinedFields = [
+    'users.id',
+    'users.email',
+    'users.hashed_password',
+    'users.salt',
+    'roles.id as role_id',
+    'roles.role as role',
+  ]
+
   async function getUser(id: number): Promise<null | UserFull> {
     logger.debug('Inside getUser model', { id });
     const user = (await db.findOne(userTable, {
-      where: { id },
-    })) as {
+      select: joinedFields,
+      where: {
+        [`${userTable}.id`]: id,
+      },
+      join: {
+        table: roleTable,
+        first: `${userTable}.role_id`,
+        second: `${roleTable}.id`,
+      },
+    })) as null | {
       id: number;
       email: string;
       hashed_password: string;
       salt: string;
-      role_id: number;
+      role: string;
     };
 
     if (user === null) {
       return null;
     }
 
-    // TODO: How to do join instead
-    const role = (await db.findOne(roleTable, {
-      where: {
-        id: user.role_id,
-      },
-    })) as {
-      role: string;
-    };
-
-    // TODO: This should never happen
-    // with join
-    if (role === null) {
-      throw new AppError('NEVER');
-    }
-
     return {
       id: user.id,
       email: user.email,
-      role: role.role,
+      role: user.role,
       hashedPassword: user.hashed_password,
       salt: user.salt,
     };
@@ -50,39 +52,33 @@ export function createModel(infras: Infras): Model {
 
   async function getUserByEmail(email: string): Promise<null | UserFull> {
     logger.debug('Inside getUserByEmail model', { email });
+
     const user = (await db.findOne(userTable, {
-      where: { email },
-    })) as {
+      select: joinedFields,
+      where: {
+        [`${userTable}.email`]: email,
+      },
+      join: {
+        table: roleTable,
+        first: `${userTable}.role_id`,
+        second: `${roleTable}.id`,
+      },
+    })) as null | {
       id: number;
       email: string;
       hashed_password: string;
       salt: string;
-      role_id: number;
+      role: string;
     };
 
     if (user === null) {
       return null;
     }
 
-    // TODO: How to do join instead
-    const role = (await db.findOne(roleTable, {
-      where: {
-        id: user.role_id,
-      },
-    })) as {
-      role: string;
-    };
-
-    // TODO: This should never happen
-    // with join
-    if (role === null) {
-      throw new AppError('NEVER');
-    }
-
     return {
       id: user.id,
       email: user.email,
-      role: role.role,
+      role: user.role,
       hashedPassword: user.hashed_password,
       salt: user.salt,
     };

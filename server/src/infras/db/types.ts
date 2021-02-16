@@ -3,6 +3,11 @@ export interface FindAllOpts {
     [field: string]: string | number | boolean;
   };
   select?: string[];
+  join?: {
+    table: string;
+    first: string;
+    second: string;
+  };
 }
 
 export interface FindOneOpts {
@@ -10,6 +15,11 @@ export interface FindOneOpts {
     [field: string]: string | number | boolean;
   };
   select?: string[];
+  join?: {
+    table: string;
+    first: string;
+    second: string;
+  };
 }
 
 export interface InsertOneOpts {

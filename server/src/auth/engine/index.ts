@@ -1,6 +1,11 @@
 import jwt from 'jsonwebtoken';
 import bcrypt from 'bcrypt';
-import { AppError, DUPLICATE_USER, UNAUTHORIZED } from '../../common/errors';
+import {
+  AppError,
+  DUPLICATE_USER,
+  UNAUTHORIZED,
+  FATAL,
+} from '../../common/errors';
 import { Credentials, Profile, Password } from '../../common/types/auth';
 import type { Infras } from '../../infras';
 import type { Engine, Model } from '../types';
@@ -30,14 +35,11 @@ export function createEngine(infras: Infras, model: Model): Engine {
       salt,
     });
 
-    // TODO: This and model.createUser
-    // should be one action
     const newlySavedUser = await model.getUserByEmail(email);
     if (newlySavedUser === null) {
-      // TODO: should never happen if
-      // this is combined to one
-      throw new AppError('NEVER');
+      throw new AppError('Newly registered user is deleted', FATAL);
     }
+
 
     const payload = {
       id: newlySavedUser.id,
@@ -45,7 +47,6 @@ export function createEngine(infras: Infras, model: Model): Engine {
       role: newlySavedUser.role,
     };
 
-    // TODO: Make async
     const token = jwt.sign(payload, tokenSecret, {
       algorithm: 'HS256',
       expiresIn: expireTime,
@@ -74,7 +75,6 @@ export function createEngine(infras: Infras, model: Model): Engine {
       role: user.role,
     };
 
-    // TODO: Make async
     const token = jwt.sign(payload, tokenSecret, {
       algorithm: 'HS256',
       expiresIn: expireTime,
@@ -86,6 +86,7 @@ export function createEngine(infras: Infras, model: Model): Engine {
   async function getProfile(userID: number): Promise<Profile> {
     logger.debug('Inside getProfile engine', { userID });
     const user = await model.getUser(userID);
+
     if (!user) {
       throw new AppError('User is not registered', UNAUTHORIZED);
     }

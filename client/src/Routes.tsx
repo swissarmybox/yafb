@@ -1,9 +1,9 @@
 import React from 'react';
 import { Switch, Route } from 'react-router-dom';
-import { TodoList } from './features/todos/TodoList';
-import { NewTodo } from './features/todos/NewTodo';
-import { EditTodo } from './features/todos/EditTodo';
-import { UserList } from './features/users/UserList';
+import { TodoList } from './features/todo/TodoList';
+import { NewTodo } from './features/todo/NewTodo';
+import { EditTodo } from './features/todo/EditTodo';
+import { UserList } from './features/user/UserList';
 import { Profile } from './features/account/Profile';
 import { NotFound } from './components/NotFound';
 

@@ -17,6 +17,14 @@ export function createDB(knex: Knex): DB {
     const select = opts.select || ['*'];
     const where = opts.where || {};
 
+    if (opts.join) {
+      return await knex
+        .from(table)
+        .innerJoin(opts.join.table, opts.join.first, opts.join.second)
+        .select(...select)
+        .where(where);
+    }
+
     return await knex
       .from(table)
       .select(...select)
@@ -29,10 +37,20 @@ export function createDB(knex: Knex): DB {
   ): Promise<null | unknown> {
     const select = opts.select || ['*'];
 
-    const rows = await knex
-      .from(table)
-      .select(...select)
-      .where(opts.where);
+    let rows: unknown[] = [];
+
+    if (opts.join) {
+      rows = await knex
+        .from(table)
+        .innerJoin(opts.join.table, opts.join.first, opts.join.second)
+        .select(...select)
+        .where(opts.where);
+    } else {
+      rows = await knex
+        .from(table)
+        .select(...select)
+        .where(opts.where);
+    }
 
     if (rows.length === 0) {
       return null;

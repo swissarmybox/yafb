@@ -4,29 +4,39 @@ import type { User, Model } from '../types';
 
 export function createModel(infras: Infras): Model {
   const { db, logger } = infras;
-  const table = 'users';
+  const userTable = 'users';
   const roleTable = 'roles';
+
+  const joinedFields = [
+    'users.id',
+    'users.email',
+    'users.hashed_password',
+    'users.salt',
+    'roles.id as role_id',
+    'roles.role as role',
+  ]
 
   async function getUsers(): Promise<User[]> {
     logger.debug('Inside getUsers model');
-    const users = (await db.findAll(table, {})) as {
+    const users = (await db.findAll(userTable, {
+      select: joinedFields,
+      join: {
+        table: roleTable,
+        first: `${userTable}.role_id`,
+        second: `${roleTable}.id`,
+      },
+    })) as {
       id: number;
       email: string;
-      role_id: number;
+      role: string;
       created_at: string;
       updated_at: string;
-    }[];
-
-    // TODO, how to do Join instead
-    const todos = (await db.findAll(roleTable, {})) as {
-      id: number;
-      role: string;
     }[];
 
     return users.map((u) => ({
       id: u.id,
       email: u.email,
-      role: (todos.find((t) => t.id === u.role_id) as any).role, // DO JOIN INSTEAD
+      role: u.role,
       createdAt: u.created_at,
       updatedAt: u.updated_at,
     }));
@@ -34,12 +44,20 @@ export function createModel(infras: Infras): Model {
 
   async function getUser(id: number): Promise<null | User> {
     logger.debug('Inside getUser model', { id });
-    const user = (await db.findOne(table, {
-      where: { id },
-    })) as {
+    const user = (await db.findOne(userTable, {
+      select: joinedFields,
+      where: {
+        [`${userTable}.id`]: id,
+      },
+      join: {
+        table: roleTable,
+        first: `${userTable}.role_id`,
+        second: `${roleTable}.id`,
+      },
+    })) as null | {
       id: number;
       email: string;
-      role_id: number;
+      role: string;
       created_at: string;
       updated_at: string;
     };
@@ -48,25 +66,10 @@ export function createModel(infras: Infras): Model {
       return null;
     }
 
-    // TODO: How to do join instead
-    const role = (await db.findOne(roleTable, {
-      where: {
-        id: user.role_id,
-      },
-    })) as {
-      role: string;
-    };
-
-    // TODO: This should never happen
-    // with join
-    if (role === null) {
-      throw new AppError('NEVER');
-    }
-
     return {
       id: user.id,
       email: user.email,
-      role: role.role,
+      role: user.role,
       createdAt: user.created_at,
       updatedAt: user.updated_at,
     };
@@ -74,7 +77,7 @@ export function createModel(infras: Infras): Model {
 
   async function deleteUser(id: number): Promise<boolean> {
     logger.debug('Inside deleteUser model', { id });
-    return await db.deleteOne(table, {
+    return await db.deleteOne(userTable, {
       where: { id },
     });
   }

@@ -33,3 +33,9 @@ export const DUPLICATE_USER = {
   code: 409,
   isOperational: true,
 };
+
+export const FATAL = {
+  name: 'FATAL_ERROR',
+  code: 500,
+  isOperational: false,
+};
