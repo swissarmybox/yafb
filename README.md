@@ -29,7 +29,7 @@ See `Makefile` to discover more commands.
 ## TODO
 
 - Docker to replace Volta and to containerize PostgreSQL
-- Combine linting/formatting
+- Combine linting/formatting/gitignore
 - E2E testing
 - Shared modules
 - Production build
