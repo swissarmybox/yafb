@@ -2,19 +2,24 @@ const baseJestConfig = require('./jest.config.js')
 
 module.exports = {
   ...baseJestConfig,
-  roots: ['<rootDir>/tests/integration'],
-  setupFilesAfterEnv: ['<rootDir>/tests/integration/setup.ts'],
+  roots: ['./tests/integration'],
+  setupFilesAfterEnv: ['./tests/integration/setup.ts'],
   reporters: [
     'default',
     [
-      'jest-junit',
+      'jest-html-reporters',
       {
-        outputDirectory: 'reports',
-        outputName: 'integration.test.xml',
-      }
-    ],
+        publicPath: './reports',
+        filename: 'integration.report.html',
+        expand: true
+      },
+    ]
   ],
-  collectCoverageFrom: ['./src','!./node_modules/'],
+  collectCoverage: true,
+  collectCoverageFrom: [
+    './src/**/*.ts',
+    '!./node_modules/',
+  ],
   coverageThreshold: {
     global: {
       branches: 0,
@@ -23,9 +28,9 @@ module.exports = {
       statements: 0,
     },
   },
-  coverageDirectory: './reports',
+  coverageDirectory: './reports/integration-coverage',
   coverageReporters: [
     'text',
-    ['json', { file: 'integration.coverage.json' }],
+    ['html'],
   ],
 }
