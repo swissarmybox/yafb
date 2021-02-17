@@ -2,26 +2,28 @@ import jwt from 'jsonwebtoken';
 import bcrypt from 'bcrypt';
 import type { Request, Response } from 'express';
 import type { Infras } from '../infras';
+import type { Config } from '../configs/server';
 import { createModel } from './model';
 import { createEngine } from './engine';
 import * as schema from './schema';
 
-export function createControllers(infras: Infras) {
+export function createControllers(infras: Infras, config: Config) {
   const { logger } = infras;
-  const model = createModel(infras);
-  const engine = createEngine(infras, model, bcrypt, jwt);
 
-  const cookieName = 'jwt';
+  const model = createModel(infras, config);
+  const engine = createEngine(infras, model, bcrypt, jwt, config);
+
+  const { cookie, httpOnly, secure, expireIn } = config.auth;
 
   async function registerUser(req: Request, res: Response): Promise<void> {
     const data = await schema.credentials.validateAsync(req.body);
     logger.debug('Inside registerUser controller', { data });
 
     const token = await engine.registerUser(data);
-    res.cookie(cookieName, token, {
-      httpOnly: true,
-      // secure: true,
-      // maxAge: expireTime
+    res.cookie(cookie, token, {
+      httpOnly,
+      secure,
+      maxAge: expireIn,
     });
 
     res.json({
@@ -35,10 +37,10 @@ export function createControllers(infras: Infras) {
     logger.debug('Inside login controller', { data });
 
     const token = await engine.login(data);
-    res.cookie(cookieName, token, {
-      httpOnly: true,
-      // secure: true,
-      // maxAge: expireTime
+    res.cookie(cookie, token, {
+      httpOnly,
+      secure,
+      maxAge: expireIn,
     });
 
     res.json({
@@ -49,7 +51,7 @@ export function createControllers(infras: Infras) {
 
   async function logout(req: Request, res: Response): Promise<void> {
     logger.debug('Inside logout controller');
-    res.clearCookie(cookieName);
+    res.clearCookie(cookie);
     res.json({
       status: 'success',
       data: null,
@@ -73,7 +75,7 @@ export function createControllers(infras: Infras) {
 
     await engine.changePassword(userID, data);
 
-    res.clearCookie(cookieName);
+    res.clearCookie(cookie);
     res.json({
       status: 'success',
       data: null,

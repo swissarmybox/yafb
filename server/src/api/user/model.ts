@@ -1,6 +1,6 @@
-import { AppError } from '../../../common/errors';
-import type { Infras } from '../../../infras';
-import type { User, Model } from '../types';
+import { AppError } from '../../common/errors';
+import type { Infras } from '../../infras';
+import type { User, Model } from './types';
 
 export function createModel(infras: Infras): Model {
   const { db, logger } = infras;
@@ -12,7 +12,7 @@ export function createModel(infras: Infras): Model {
     'users.email',
     'roles.id as role_id',
     'roles.role as role',
-  ]
+  ];
 
   async function getUsers(): Promise<User[]> {
     logger.debug('Inside getUsers model');

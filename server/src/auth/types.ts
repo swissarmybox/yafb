@@ -1,4 +1,18 @@
-import type { Credentials, Profile, Password } from '../common/types/auth';
+export interface Credentials {
+  email: string;
+  password: string;
+}
+
+export interface Profile {
+  id: number;
+  email: string;
+  role: string;
+}
+
+export interface Password {
+  oldPassword: string;
+  newPassword: string;
+}
 
 export interface Engine {
   registerUser(credentials: Credentials): Promise<string>;
@@ -37,12 +51,16 @@ export interface Model {
 export interface Bcrypt {
   genSalt(rounds: number): Promise<string>;
   hash(password: string, salt: string): Promise<string>;
-  compare(password: string, hashedPassword: string): Promise<boolean>; 
+  compare(password: string, hashedPassword: string): Promise<boolean>;
 }
 
 export interface JWT {
-  sign(payload: any, secret: string, options: {
-    algorithm: 'HS256';
-    expiresIn: number;
-  }): string;
+  sign(
+    payload: any,
+    secret: string,
+    options: {
+      algorithm: 'HS256';
+      expiresIn: number;
+    },
+  ): string;
 }

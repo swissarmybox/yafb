@@ -1,12 +1,20 @@
-import { AppError } from '../../common/errors';
-import type { Infras } from '../../infras';
-import type { UserFull, NewUser, EncryptedCredentials, Model } from '../types';
+import { AppError } from '../common/errors';
+import type { Infras } from '../infras';
+import type {
+  UserFull,
+  NewUser,
+  EncryptedCredentials,
+  Model,
+} from './types';
+import type { Config } from '../configs/server';
 
-export function createModel(infras: Infras): Model {
+export function createModel(infras: Infras, config: Config): Model {
   const { db, logger } = infras;
-  const userTable = 'users';
-  const roleTable = 'roles';
-  const userRole = 2;
+  const {
+    user: userTable,
+    role: roleTable,
+  } = config.tables
+  const userRole = config.roles.user.id
 
   const joinedFields = [
     'users.id',
@@ -15,7 +23,7 @@ export function createModel(infras: Infras): Model {
     'users.salt',
     'roles.id as role_id',
     'roles.role as role',
-  ]
+  ];
 
   async function getUser(id: number): Promise<null | UserFull> {
     logger.debug('Inside getUser model', { id });

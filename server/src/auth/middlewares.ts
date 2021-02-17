@@ -2,21 +2,22 @@ import type { Request, Response, NextFunction } from 'express';
 import jwt from 'jsonwebtoken';
 import { AppError, TOKEN_INVALID, UNAUTHORIZED } from '../common/errors';
 import type { User } from './types';
+import type { Config } from '../configs/server';
 
-export function createMiddlewares() {
-  const cookieName = 'jwt';
-  const ADMIN = 'admin';
-  const tokenSecret = 'yafb_token';
+export function createMiddlewares(config: Config) {
+  const { auth, roles } = config
+  const { cookie, secret } = auth
+  const adminRole = roles.admin.name
 
   function verifyToken(req: Request): User {
-    const token = req.cookies[cookieName];
+    const token = req.cookies[cookie];
 
     if (!token) {
       throw new AppError('JWT token not found', TOKEN_INVALID);
     }
 
     try {
-      const payload = jwt.verify(token, tokenSecret);
+      const payload = jwt.verify(token, secret);
 
       return payload as User;
     } catch (e) {
@@ -46,7 +47,7 @@ export function createMiddlewares() {
     try {
       const payload = verifyToken(req);
 
-      if (payload.role !== ADMIN) {
+      if (payload.role !== adminRole) {
         throw new AppError('User is not authorized', UNAUTHORIZED);
       }
 

@@ -3,22 +3,28 @@ import {
   DUPLICATE_USER,
   UNAUTHORIZED,
   FATAL,
-} from '../../common/errors';
-import { Credentials, Profile, Password } from '../../common/types/auth';
-import type { Infras } from '../../infras';
-import type { Engine, Model, Bcrypt, JWT } from '../types';
+} from '../common/errors';
+import type { Infras } from '../infras';
+import type {
+  Credentials,
+  Profile,
+  Password,
+  Engine,
+  Model,
+  Bcrypt,
+  JWT,
+} from './types';
+import type { Config } from '../configs/server';
 
 export function createEngine(
   infras: Infras,
   model: Model,
   bcrypt: Bcrypt,
   jwt: JWT,
+  config: Config,
 ): Engine {
   const { logger } = infras;
-
-  const tokenSecret = 'yafb_token';
-  const expireTime = 3000000;
-  const saltRounds = 10; // make it more secure in prod
+  const { secret, expireIn, saltRounds } = config.auth;
 
   async function registerUser(credentials: Credentials): Promise<string> {
     logger.debug('Inside registerUser engine', { credentials });
@@ -49,9 +55,9 @@ export function createEngine(
       role: newlySavedUser.role,
     };
 
-    const token = jwt.sign(payload, tokenSecret, {
+    const token = jwt.sign(payload, secret, {
       algorithm: 'HS256',
-      expiresIn: expireTime,
+      expiresIn: expireIn,
     });
 
     return token;
@@ -77,9 +83,9 @@ export function createEngine(
       role: user.role,
     };
 
-    const token = jwt.sign(payload, tokenSecret, {
+    const token = jwt.sign(payload, secret, {
       algorithm: 'HS256',
-      expiresIn: expireTime,
+      expiresIn: expireIn,
     });
 
     return token;

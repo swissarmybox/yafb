@@ -5,15 +5,15 @@ import cors from 'cors';
 import bodyParser from 'body-parser';
 import cookieParser from 'cookie-parser';
 import type { Application } from 'express';
-import type { Env } from '../../common/types/env';
+import type { Config } from '../../configs/server';
 import { createHTTPLogger } from './httpLogger';
 
 export function configureMiddlewares(
   httpLoggerFn: (meta: any) => void,
   app: Application,
-  env: Env,
+  config: Config,
 ): void {
-  if (env === 'production') {
+  if (config.env === 'production') {
     const staticDir = path.join(__dirname, '../../../client');
     app.use('/', express.static(staticDir));
   }

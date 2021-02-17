@@ -1,5 +1,5 @@
-import type { Infras } from '../../../infras';
-import type { Todo, NewTodo, UpdateTodo, Model } from '../types';
+import type { Infras } from '../../infras';
+import type { Todo, NewTodo, UpdateTodo, Model } from './types';
 
 export function createModel(infras: Infras): Model {
   const { db, logger } = infras;

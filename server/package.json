@@ -6,15 +6,15 @@
     "build": "tsc",
     "clean": "rm -rf build",
     "test": "npm run test:unit && npm run test:integration",
-    "test:integration": "NODE_ENV=test jest --config jest.config.integration.js --maxWorkers=1",
     "test:unit": "NODE_ENV=test jest --config jest.config.unit.js",
+    "test:integration": "NODE_ENV=test jest --config jest.config.integration.js --maxWorkers=1",
     "migrate:make": "knex migrate:make -x ts",
     "migrate:latest:dev": "NODE_ENV=development knex --knexfile src/configs/knexfile.ts migrate:latest",
     "migrate:rollback:dev": "NODE_ENV=development knex --knexfile src/configs/knexfile.ts migrate:rollback",
     "migrate:latest:test": "NODE_ENV=test knex --knexfile src/configs/knexfile.ts migrate:latest",
     "migrate:rollback:test": "NODE_ENV=test knex --knexfile src/configs/knexfile.ts migrate:rollback",
-    "lint": "eslint '{src,migrations,tests}/**/*.{js,jsx,ts,tsx}'",
-    "lint:fix": "eslint --fix '{src,migrations,tests}/**/*.{js,jsx,ts,tsx}'"
+    "lint": "eslint '{src,migrations,integration}/**/*.{js,jsx,ts,tsx}'",
+    "lint:fix": "eslint --fix '{src,migrations,integration}/**/*.{js,jsx,ts,tsx}'"
   },
   "devDependencies": {
     "@types/bcrypt": "^3.0.0",

@@ -1,8 +1,14 @@
-import * as todo from '../../common/types/todo';
+export interface Todo {
+  id: number;
+  title: string;
+  description: string;
+  done: boolean;
+  createdAt: string;
+  updatedAt: string;
+}
 
-export type Todo = todo.Todo;
-export type NewTodo = todo.NewTodo;
-export type UpdateTodo = todo.UpdateTodo;
+export type NewTodo = Omit<Todo, 'id' | 'done' | 'createdAt' | 'updatedAt'>;
+export type UpdateTodo = Omit<Todo, 'id' | 'createdAt' | 'updatedAt'>;
 
 export interface Engine {
   getTodos(userID: number): Promise<Todo[]>;

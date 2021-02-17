@@ -1,6 +1,10 @@
-import * as user from '../../common/types/user';
-
-export type User = user.User;
+export interface User {
+  id: number;
+  email: string;
+  role: string;
+  createdAt: string;
+  updatedAt: string;
+}
 
 export interface Engine {
   getUsers(): Promise<User[]>;

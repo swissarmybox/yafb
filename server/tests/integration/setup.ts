@@ -1,5 +1,5 @@
 // @ts-nocheck
-import { infras, server } from '../src';
+import { infras, server } from '../../src';
 
 beforeAll(async () => {
   global['infras'] = infras;

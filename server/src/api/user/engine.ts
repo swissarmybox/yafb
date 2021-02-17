@@ -1,6 +1,6 @@
-import { AppError, NOT_FOUND } from '../../../common/errors';
-import type { Infras } from '../../../infras';
-import type { User, Engine, Model } from '../types';
+import { AppError, NOT_FOUND } from '../../common/errors';
+import type { Infras } from '../../infras';
+import type { User, Engine, Model } from './types';
 
 export function createEngine(infras: Infras, model: Model): Engine {
   const { logger } = infras;
