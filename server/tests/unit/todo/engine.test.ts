@@ -1,5 +1,4 @@
 import { infras } from '../_mocks/infras';
-import { config } from '../_mocks/config';
 import { createEngine } from '../../../src/api/todo/engine';
 
 const model = {
@@ -126,8 +125,6 @@ describe('Todo Engine', () => {
   describe('createTodo', () => {
     it('given todo and user id, should create todo', async () => {
       // Arrange
-      const someDate = new Date().toISOString();
-
       const engine = createEngine(infras, model);
       model.createTodo.mockImplementationOnce(() => Promise.resolve(1));
 

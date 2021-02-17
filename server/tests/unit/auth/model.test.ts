@@ -2,7 +2,7 @@ import { infras } from '../_mocks/infras';
 import { config } from '../_mocks/config';
 import { createModel } from '../../../src/auth/model';
 
-const { db } = infras
+const { db } = infras;
 
 describe('Auth Model', () => {
   beforeEach(() => {
@@ -43,8 +43,6 @@ describe('Auth Model', () => {
 
     it('given existing user id, should return user', async () => {
       // Arrange
-      const someDate = new Date().toISOString();
-
       const model = createModel(config, infras);
       db.findOne.mockImplementationOnce(() =>
         Promise.resolve({
@@ -123,8 +121,6 @@ describe('Auth Model', () => {
 
     it('given existing user email, should return user', async () => {
       // Arrange
-      const someDate = new Date().toISOString();
-
       const model = createModel(config, infras);
       db.findOne.mockImplementationOnce(() =>
         Promise.resolve({

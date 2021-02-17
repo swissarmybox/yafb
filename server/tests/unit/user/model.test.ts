@@ -2,7 +2,7 @@ import { infras } from '../_mocks/infras';
 import { config } from '../_mocks/config';
 import { createModel } from '../../../src/api/user/model';
 
-const { db } = infras
+const { db } = infras;
 
 describe('User Model', () => {
   beforeEach(() => {
@@ -150,8 +150,6 @@ describe('User Model', () => {
   describe('deleteUser', () => {
     it('given user id, should return boolean', async () => {
       // Arrange
-      const someDate = new Date().toISOString();
-
       const model = createModel(config, infras);
       db.deleteOne.mockImplementationOnce(() => Promise.resolve(true));
 

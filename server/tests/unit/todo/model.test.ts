@@ -2,7 +2,7 @@ import { infras } from '../_mocks/infras';
 import { config } from '../_mocks/config';
 import { createModel } from '../../../src/api/todo/model';
 
-const { db } = infras
+const { db } = infras;
 
 describe('Todo Model', () => {
   beforeEach(() => {

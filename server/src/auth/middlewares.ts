@@ -5,9 +5,9 @@ import type { Config } from '../_common/configs/server';
 import type { User } from './types';
 
 export function createMiddlewares(config: Config) {
-  const { auth, roles } = config
-  const { cookie, secret } = auth
-  const adminRole = roles.admin.name
+  const { auth, roles } = config;
+  const { cookie, secret } = auth;
+  const adminRole = roles.admin.name;
 
   function verifyToken(req: Request): User {
     const token = req.cookies[cookie];

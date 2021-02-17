@@ -4,7 +4,7 @@ import * as configs from './_common/configs';
 import { createInfras } from './_common/infras';
 import { createApp } from './server';
 
-type Env = 'test' | 'development' | 'production'
+type Env = 'test' | 'development' | 'production';
 
 const env: Env = process.env.NODE_ENV as Env;
 const serverConfig = configs.server[env];

@@ -54,4 +54,4 @@ export const config: Config = {
       name: 'user',
     },
   },
-}
+};

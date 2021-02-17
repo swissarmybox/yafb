@@ -1,5 +1,4 @@
 import { infras } from '../_mocks/infras';
-import { config } from '../_mocks/config';
 import { createEngine } from '../../../src/api/user/engine';
 
 const model = {

@@ -72,7 +72,7 @@ describe('Auth Engine', () => {
       jwt.sign.mockImplementationOnce(() => Promise.resolve('token'));
 
       // Act
-      await engine.registerUser({
+      const token = await engine.registerUser({
         email: 'user@mail.com',
         password: 'hola',
       });
@@ -108,6 +108,8 @@ describe('Auth Engine', () => {
           expiresIn: 3000000,
         },
       );
+
+      expect(token.length > 0).toBe(true);
     });
   });
 
@@ -173,6 +175,7 @@ describe('Auth Engine', () => {
       );
 
       bcrypt.compare.mockImplementationOnce(() => Promise.resolve(true));
+      jwt.sign.mockImplementationOnce(() => Promise.resolve('some-token'));
 
       // Act
       const token = await engine.login({
@@ -200,6 +203,8 @@ describe('Auth Engine', () => {
           expiresIn: 3000000,
         },
       );
+
+      expect(token).toBe('some-token');
     });
   });
 

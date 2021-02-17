@@ -3,10 +3,9 @@
     ".git",
     "node_modules/",
     "build/",
-    "coverage/"
+    "reports/"
   ],
   "watch": [
-    "configs",
     "src",
     "types"
   ],
