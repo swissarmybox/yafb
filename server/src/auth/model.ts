@@ -8,7 +8,7 @@ import type {
 } from './types';
 import type { Config } from '../configs/server';
 
-export function createModel(infras: Infras, config: Config): Model {
+export function createModel(config: Config, infras: Infras): Model {
   const { db, logger } = infras;
   const {
     user: userTable,

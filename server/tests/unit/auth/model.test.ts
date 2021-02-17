@@ -12,7 +12,7 @@ describe('Auth Model', () => {
   describe('getUser', () => {
     it('given non existing user id, should return null', async () => {
       // Arrange
-      const model = createModel(infras, config);
+      const model = createModel(config, infras);
       db.findOne.mockImplementationOnce(() => Promise.resolve(null));
 
       // Act
@@ -45,7 +45,7 @@ describe('Auth Model', () => {
       // Arrange
       const someDate = new Date().toISOString();
 
-      const model = createModel(infras, config);
+      const model = createModel(config, infras);
       db.findOne.mockImplementationOnce(() =>
         Promise.resolve({
           id: 2,
@@ -92,7 +92,7 @@ describe('Auth Model', () => {
   describe('getUserByEmail', () => {
     it('given non existing user email, should return null', async () => {
       // Arrange
-      const model = createModel(infras, config);
+      const model = createModel(config, infras);
       db.findOne.mockImplementationOnce(() => Promise.resolve(null));
 
       // Act
@@ -125,7 +125,7 @@ describe('Auth Model', () => {
       // Arrange
       const someDate = new Date().toISOString();
 
-      const model = createModel(infras, config);
+      const model = createModel(config, infras);
       db.findOne.mockImplementationOnce(() =>
         Promise.resolve({
           id: 2,
@@ -172,7 +172,7 @@ describe('Auth Model', () => {
   describe('createUser', () => {
     it('given a new user, should create user', async () => {
       // Arrange
-      const model = createModel(infras, config);
+      const model = createModel(config, infras);
       db.insertOne.mockImplementationOnce(() => Promise.resolve(3));
 
       // Act
@@ -199,7 +199,7 @@ describe('Auth Model', () => {
   describe('changeUserPassword', () => {
     it('given a user id and new credentials, should change user password', async () => {
       // Arrange
-      const model = createModel(infras, config);
+      const model = createModel(config, infras);
       db.updateOne.mockImplementationOnce(() => Promise.resolve(true));
 
       // Act

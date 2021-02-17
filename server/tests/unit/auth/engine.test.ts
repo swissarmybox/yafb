@@ -27,7 +27,7 @@ describe('Auth Engine', () => {
   describe('registerUsers', () => {
     it('given existing credentials, should throw error', async () => {
       // Arrange
-      const engine = createEngine(infras, model, bcrypt, jwt, config);
+      const engine = createEngine(config, infras, model, bcrypt, jwt);
       model.getUserByEmail.mockImplementationOnce(() =>
         Promise.resolve({
           id: 1,
@@ -54,7 +54,7 @@ describe('Auth Engine', () => {
 
     it('given new credentials, should register user', async () => {
       // Arrange
-      const engine = createEngine(infras, model, bcrypt, jwt, config);
+      const engine = createEngine(config, infras, model, bcrypt, jwt);
       model.getUserByEmail.mockImplementationOnce(() => Promise.resolve(null));
       bcrypt.genSalt.mockImplementationOnce(() => Promise.resolve('salt'));
       bcrypt.hash.mockImplementationOnce(() => Promise.resolve('hashed'));
@@ -114,7 +114,7 @@ describe('Auth Engine', () => {
   describe('login', () => {
     it('given non existing credentials, should throw error', async () => {
       // Arrange
-      const engine = createEngine(infras, model, bcrypt, jwt, config);
+      const engine = createEngine(config, infras, model, bcrypt, jwt);
       model.getUserByEmail.mockImplementationOnce(() => Promise.resolve(null));
 
       // Act Assert
@@ -133,7 +133,7 @@ describe('Auth Engine', () => {
 
     it('given invalid password, should throw error', async () => {
       // Arrange
-      const engine = createEngine(infras, model, bcrypt, jwt, config);
+      const engine = createEngine(config, infras, model, bcrypt, jwt);
 
       model.getUserByEmail.mockImplementationOnce(() =>
         Promise.resolve({
@@ -161,7 +161,7 @@ describe('Auth Engine', () => {
 
     it('given correct credentials, should login', async () => {
       // Arrange
-      const engine = createEngine(infras, model, bcrypt, jwt, config);
+      const engine = createEngine(config, infras, model, bcrypt, jwt);
 
       model.getUserByEmail.mockImplementationOnce(() =>
         Promise.resolve({
@@ -206,7 +206,7 @@ describe('Auth Engine', () => {
   describe('getProfile', () => {
     it('given non existing user id, should throw error', async () => {
       // Arrange
-      const engine = createEngine(infras, model, bcrypt, jwt, config);
+      const engine = createEngine(config, infras, model, bcrypt, jwt);
       model.getUser.mockImplementationOnce(() => Promise.resolve(null));
 
       // Act Assert
@@ -222,7 +222,7 @@ describe('Auth Engine', () => {
 
     it('given existing user id, should return user profile', async () => {
       // Arrange
-      const engine = createEngine(infras, model, bcrypt, jwt, config);
+      const engine = createEngine(config, infras, model, bcrypt, jwt);
       model.getUser.mockImplementationOnce(() =>
         Promise.resolve({
           id: 1,
@@ -246,7 +246,7 @@ describe('Auth Engine', () => {
   describe('changePassword', () => {
     it('given non existing user id, should throw error', async () => {
       // Arrange
-      const engine = createEngine(infras, model, bcrypt, jwt, config);
+      const engine = createEngine(config, infras, model, bcrypt, jwt);
       model.getUser.mockImplementationOnce(() => Promise.resolve(null));
 
       // Act Assert
@@ -265,7 +265,7 @@ describe('Auth Engine', () => {
 
     it('given invalid password, should throw error', async () => {
       // Arrange
-      const engine = createEngine(infras, model, bcrypt, jwt, config);
+      const engine = createEngine(config, infras, model, bcrypt, jwt);
 
       model.getUser.mockImplementationOnce(() =>
         Promise.resolve({
@@ -295,7 +295,7 @@ describe('Auth Engine', () => {
 
     it('given correct credentials, should throw error if failed to change password', async () => {
       // Arrange
-      const engine = createEngine(infras, model, bcrypt, jwt, config);
+      const engine = createEngine(config, infras, model, bcrypt, jwt);
 
       model.getUser.mockImplementationOnce(() =>
         Promise.resolve({
@@ -331,7 +331,7 @@ describe('Auth Engine', () => {
 
     it('given correct credentials, should change password', async () => {
       // Arrange
-      const engine = createEngine(infras, model, bcrypt, jwt, config);
+      const engine = createEngine(config, infras, model, bcrypt, jwt);
 
       model.getUser.mockImplementationOnce(() =>
         Promise.resolve({

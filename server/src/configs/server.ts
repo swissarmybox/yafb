@@ -5,6 +5,7 @@ export interface Config {
   tables: {
     user: string;
     role: string;
+    todo: string;
   };
   auth: {
     cookie: string;
@@ -38,6 +39,7 @@ export const server: {
     tables: {
       user: 'users',
       role: 'roles',
+      todo: 'todos',
     },
     auth: {
       cookie: 'jwt',
@@ -65,6 +67,7 @@ export const server: {
     tables: {
       user: 'users',
       role: 'roles',
+      todo: 'todos',
     },
     auth: {
       cookie: 'jwt',
@@ -92,6 +95,7 @@ export const server: {
     tables: {
       user: 'users',
       role: 'roles',
+      todo: 'todos',
     },
     auth: {
       cookie: 'jwt',

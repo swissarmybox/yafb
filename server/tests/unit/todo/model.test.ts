@@ -14,7 +14,7 @@ describe('Todo Model', () => {
       // Arrange
       const someDate = new Date().toISOString();
 
-      const model = createModel(infras);
+      const model = createModel(config, infras);
       db.findAll.mockImplementationOnce(() =>
         Promise.resolve([
           {
@@ -70,7 +70,7 @@ describe('Todo Model', () => {
   describe('getTodo', () => {
     it('given non existing todo id, should return null', async () => {
       // Arrange
-      const model = createModel(infras);
+      const model = createModel(config, infras);
       db.findOne.mockImplementationOnce(() => Promise.resolve(null));
 
       // Act
@@ -91,7 +91,7 @@ describe('Todo Model', () => {
       // Arrange
       const someDate = new Date().toISOString();
 
-      const model = createModel(infras);
+      const model = createModel(config, infras);
       db.findOne.mockImplementationOnce(() =>
         Promise.resolve({
           id: 1,
@@ -128,7 +128,7 @@ describe('Todo Model', () => {
   describe('createTodo', () => {
     it('given todo and user id, should create todo', async () => {
       // Arrange
-      const model = createModel(infras);
+      const model = createModel(config, infras);
       db.insertOne.mockImplementationOnce(() => Promise.resolve(1));
 
       // Act
@@ -152,7 +152,7 @@ describe('Todo Model', () => {
   describe('updateTodo', () => {
     it('given user id, todo id and todo, should return boolean', async () => {
       // Arrange
-      const model = createModel(infras);
+      const model = createModel(config, infras);
       db.updateOne.mockImplementationOnce(() => Promise.resolve(false));
 
       // Act
@@ -181,7 +181,7 @@ describe('Todo Model', () => {
   describe('deleteTodo', () => {
     it('given user id and todo id, should return boolean', async () => {
       // Arrange
-      const model = createModel(infras);
+      const model = createModel(config, infras);
       db.deleteOne.mockImplementationOnce(() => Promise.resolve(false));
 
       // Act

@@ -1,11 +1,14 @@
 import { AppError } from '../../common/errors';
 import type { Infras } from '../../infras';
+import type { Config } from '../../configs/server';
 import type { User, Model } from './types';
 
-export function createModel(infras: Infras): Model {
+export function createModel(config: Config, infras: Infras): Model {
   const { db, logger } = infras;
-  const userTable = 'users';
-  const roleTable = 'roles';
+  const {
+    user: userTable,
+    role: roleTable,
+  } = config.tables
 
   const joinedFields = [
     'users.id',

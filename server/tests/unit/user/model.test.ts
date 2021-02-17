@@ -14,7 +14,7 @@ describe('User Model', () => {
       // Arrange
       const someDate = new Date().toISOString();
 
-      const model = createModel(infras);
+      const model = createModel(config, infras);
       db.findAll.mockImplementationOnce(() =>
         Promise.resolve([
           {
@@ -74,7 +74,7 @@ describe('User Model', () => {
   describe('getUser', () => {
     it('given non existing user id, should return null', async () => {
       // Arrange
-      const model = createModel(infras);
+      const model = createModel(config, infras);
       db.findOne.mockImplementationOnce(() => Promise.resolve(null));
 
       // Act
@@ -105,7 +105,7 @@ describe('User Model', () => {
       // Arrange
       const someDate = new Date().toISOString();
 
-      const model = createModel(infras);
+      const model = createModel(config, infras);
       db.findOne.mockImplementationOnce(() =>
         Promise.resolve({
           id: 2,
@@ -152,7 +152,7 @@ describe('User Model', () => {
       // Arrange
       const someDate = new Date().toISOString();
 
-      const model = createModel(infras);
+      const model = createModel(config, infras);
       db.deleteOne.mockImplementationOnce(() => Promise.resolve(true));
 
       // Act

@@ -17,11 +17,11 @@ import type {
 import type { Config } from '../configs/server';
 
 export function createEngine(
+  config: Config,
   infras: Infras,
   model: Model,
   bcrypt: Bcrypt,
   jwt: JWT,
-  config: Config,
 ): Engine {
   const { logger } = infras;
   const { secret, expireIn, saltRounds } = config.auth;

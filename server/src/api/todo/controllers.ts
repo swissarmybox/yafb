@@ -1,12 +1,13 @@
 import type { Request, Response } from 'express';
 import type { Infras } from '../../infras';
+import type { Config } from '../../configs/server';
 import { createModel } from './model';
 import { createEngine } from './engine';
 import * as schema from './schema';
 
-export function createControllers(infras: Infras) {
+export function createControllers(config: Config, infras: Infras) {
   const { logger } = infras;
-  const model = createModel(infras);
+  const model = createModel(config, infras);
   const engine = createEngine(infras, model);
 
   async function getTodos(req: Request, res: Response): Promise<void> {

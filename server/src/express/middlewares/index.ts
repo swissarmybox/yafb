@@ -9,9 +9,9 @@ import type { Config } from '../../configs/server';
 import { createHTTPLogger } from './httpLogger';
 
 export function configureMiddlewares(
+  config: Config,
   httpLoggerFn: (meta: any) => void,
   app: Application,
-  config: Config,
 ): void {
   if (config.env === 'production') {
     const staticDir = path.join(__dirname, '../../../client');

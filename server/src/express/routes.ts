@@ -6,26 +6,26 @@ import { createRoutes as createAuthRoutes } from '../auth';
 import { createRoutes as createUserRoutes } from '../api/user';
 import { createRoutes as createTodoRoutes } from '../api/todo';
 
-function createAPIRoutes(infras: Infras, config: Config): Router {
+function createAPIRoutes(config: Config, infras: Infras): Router {
   const router = express.Router();
 
-  router.use('/users', createUserRoutes(infras, config));
-  router.use('/todos', createTodoRoutes(infras, config));
+  router.use('/users', createUserRoutes(config, infras));
+  router.use('/todos', createTodoRoutes(config, infras));
 
   return router;
 }
 
 export function configureRoutes(
+  config: Config,
   infras: Infras,
   app: Application,
-  config: Config,
 ): void {
   app.get('/health', (req, res) => {
     res.sendStatus(200);
   });
 
-  app.use('/auth', createAuthRoutes(infras, config));
-  app.use('/api', createAPIRoutes(infras, config));
+  app.use('/auth', createAuthRoutes(config, infras));
+  app.use('/api', createAPIRoutes(config, infras));
 
   if (config.env === 'production') {
     app.get('*', (req, res) => {

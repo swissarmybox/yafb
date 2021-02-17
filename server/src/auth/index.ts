@@ -6,11 +6,11 @@ import { wrapAsync } from '../express/errors/wrapAsync';
 import { createMiddlewares } from './middlewares';
 import { createControllers } from './controllers';
 
-export function createRoutes(infras: Infras, config: Config): Router {
+export function createRoutes(config: Config, infras: Infras): Router {
   const router = express.Router();
 
   const { isLoggedIn } = createMiddlewares(config);
-  const controllers = createControllers(infras, config);
+  const controllers = createControllers(config, infras);
 
   router.get(
     '/profile',

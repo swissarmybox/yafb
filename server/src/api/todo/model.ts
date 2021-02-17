@@ -1,9 +1,10 @@
 import type { Infras } from '../../infras';
+import type { Config } from '../../configs/server';
 import type { Todo, NewTodo, UpdateTodo, Model } from './types';
 
-export function createModel(infras: Infras): Model {
+export function createModel(config: Config, infras: Infras): Model {
   const { db, logger } = infras;
-  const table = 'todos';
+  const table = config.tables.todo;
 
   async function getTodos(userID: number): Promise<Todo[]> {
     logger.debug('Inside getTodos model', { userID });

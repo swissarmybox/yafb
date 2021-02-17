@@ -5,6 +5,7 @@ interface Config {
   tables: {
     user: string;
     role: string;
+    todo: string;
   };
   auth: {
     cookie: string;
@@ -33,6 +34,7 @@ export const config: Config = {
   tables: {
     user: 'users',
     role: 'roles',
+    todo: 'todos',
   },
   auth: {
     cookie: 'jwt',

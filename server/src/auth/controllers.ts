@@ -7,11 +7,11 @@ import { createModel } from './model';
 import { createEngine } from './engine';
 import * as schema from './schema';
 
-export function createControllers(infras: Infras, config: Config) {
+export function createControllers(config: Config, infras: Infras) {
   const { logger } = infras;
 
-  const model = createModel(infras, config);
-  const engine = createEngine(infras, model, bcrypt, jwt, config);
+  const model = createModel(config, infras);
+  const engine = createEngine(config, infras, model, bcrypt, jwt);
 
   const { cookie, httpOnly, secure, expireIn } = config.auth;
 

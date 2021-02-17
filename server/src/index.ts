@@ -15,7 +15,7 @@ const knex = Knex(knexConfig);
 const winstonLogger = winston.createLogger(winstonConfig);
 
 const infras = createInfras(knex, winstonLogger);
-const app = createApp(infras, serverConfig);
+const app = createApp(serverConfig, infras);
 
 const { host, port } = serverConfig;
 const server = app.listen(port, () => {
