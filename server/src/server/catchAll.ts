@@ -1,5 +1,5 @@
 import type { Request, Response, NextFunction } from 'express';
-import { AppError } from '../../common/errors';
+import { AppError } from '../_common/errors';
 
 export interface ErrLoggerFn {
   (text: string, meta: any): void;

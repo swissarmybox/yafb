@@ -1,5 +1,6 @@
 import type { Request, Response, NextFunction, RequestHandler } from 'express';
-import { AppError, INVALID_PARAMETER } from '../../common/errors';
+import { AppError } from './AppError';
+import { INVALID_PARAMETER } from './errTypes';
 
 export interface Handler {
   (req: Request, res: Response, next: NextFunction): Promise<void>;

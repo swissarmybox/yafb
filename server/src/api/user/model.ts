@@ -1,6 +1,6 @@
-import { AppError } from '../../common/errors';
-import type { Infras } from '../../infras';
-import type { Config } from '../../configs/server';
+import { AppError } from '../../_common/errors';
+import type { Infras } from '../../_common/infras';
+import type { Config } from '../../_common/configs/server';
 import type { User, Model } from './types';
 
 export function createModel(config: Config, infras: Infras): Model {

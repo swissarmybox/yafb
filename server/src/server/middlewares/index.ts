@@ -5,7 +5,7 @@ import cors from 'cors';
 import bodyParser from 'body-parser';
 import cookieParser from 'cookie-parser';
 import type { Application } from 'express';
-import type { Config } from '../../configs/server';
+import type { Config } from '../../_common/configs/server';
 import { createHTTPLogger } from './httpLogger';
 
 export function configureMiddlewares(

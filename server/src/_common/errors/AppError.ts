@@ -1,4 +1,3 @@
-export * from './errTypes';
 import { INTERNAL_SERVER } from './errTypes';
 
 export class AppError extends Error {

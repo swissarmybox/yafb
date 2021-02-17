@@ -1,8 +1,8 @@
 import type { Request, Response, NextFunction } from 'express';
 import jwt from 'jsonwebtoken';
-import { AppError, TOKEN_INVALID, UNAUTHORIZED } from '../common/errors';
+import { AppError, TOKEN_INVALID, UNAUTHORIZED } from '../_common/errors';
+import type { Config } from '../_common/configs/server';
 import type { User } from './types';
-import type { Config } from '../configs/server';
 
 export function createMiddlewares(config: Config) {
   const { auth, roles } = config

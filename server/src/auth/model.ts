@@ -1,12 +1,12 @@
-import { AppError } from '../common/errors';
-import type { Infras } from '../infras';
+import type { Config } from '../_common/configs/server';
+import type { Infras } from '../_common/infras';
+import { AppError } from '../_common/errors';
 import type {
   UserFull,
   NewUser,
   EncryptedCredentials,
   Model,
 } from './types';
-import type { Config } from '../configs/server';
 
 export function createModel(config: Config, infras: Infras): Model {
   const { db, logger } = infras;

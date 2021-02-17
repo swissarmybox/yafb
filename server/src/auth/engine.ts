@@ -3,8 +3,9 @@ import {
   DUPLICATE_USER,
   UNAUTHORIZED,
   FATAL,
-} from '../common/errors';
-import type { Infras } from '../infras';
+} from '../_common/errors';
+import type { Config } from '../_common/configs/server';
+import type { Infras } from '../_common/infras';
 import type {
   Credentials,
   Profile,
@@ -14,7 +15,6 @@ import type {
   Bcrypt,
   JWT,
 } from './types';
-import type { Config } from '../configs/server';
 
 export function createEngine(
   config: Config,

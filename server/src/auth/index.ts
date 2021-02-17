@@ -1,8 +1,8 @@
 import express from 'express';
 import type { Router } from 'express';
-import type { Infras } from '../infras';
-import type { Config } from '../configs/server';
-import { wrapAsync } from '../express/errors/wrapAsync';
+import type { Infras } from '../_common/infras';
+import type { Config } from '../_common/configs/server';
+import { wrapAsync } from '../_common/errors';
 import { createMiddlewares } from './middlewares';
 import { createControllers } from './controllers';
 

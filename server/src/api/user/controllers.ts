@@ -1,6 +1,6 @@
 import type { Request, Response } from 'express';
-import type { Infras } from '../../infras';
-import type { Config } from '../../configs/server';
+import type { Infras } from '../../_common/infras';
+import type { Config } from '../../_common/configs/server';
 import { createModel } from './model';
 import { createEngine } from './engine';
 import * as schema from './schema';
