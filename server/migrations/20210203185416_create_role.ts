@@ -8,8 +8,6 @@ export async function up(knex: Knex): Promise<void> {
 
     table.timestamps(true, true);
   });
-
-  await knex('roles').insert([{ role: 'admin' }, { role: 'user' }]);
 }
 
 export async function down(knex: Knex): Promise<void> {

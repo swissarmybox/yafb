@@ -1,6 +1,7 @@
 import path from 'path';
 
-const migrationsDir = path.join(__dirname, '../../migrations');
+const migrationsDir = path.join(__dirname, '../../../migrations');
+const seedsDir = path.join(__dirname, '../../../seeds');
 
 module.exports = {
   test: {
@@ -19,6 +20,9 @@ module.exports = {
     migrations: {
       directory: migrationsDir,
     },
+    seeds: {
+      directory: seedsDir,
+    },
   },
   development: {
     client: 'postgresql',
@@ -36,6 +40,9 @@ module.exports = {
     migrations: {
       directory: migrationsDir,
     },
+    seeds: {
+      directory: seedsDir,
+    },
   },
   production: {
     client: 'postgresql',
@@ -52,6 +59,9 @@ module.exports = {
     },
     migrations: {
       directory: migrationsDir,
+    },
+    seeds: {
+      directory: seedsDir,
     },
   },
 };
